@@ -40,24 +40,25 @@ while True:
         else:
             command_queue.append(ship.stay_still())
 
-    # Gather dropoffs #
-    dropoffs = me.get_dropoffs()
-    for dropoff in dropoffs:
-        dist = game_map.calculate_distance(ship.position, dropoff.position)
+        # Gather dropoffs #
+        dropoffs = me.get_dropoffs()
+        dropoffs.append(me.shipyard)
+        for dropoff in dropoffs:
+            dist = game_map.calculate_distance(ship.position, dropoff.position)
 
-        # Ship Organiser #
-        if ship.id not in ship_status:
-            ship_status[ship.id] = "Randomly Moving"
-        if me.halite_amount >= 4000 and dist > 30:
-            ship_status[ship.id] = "Spawning DropOff"
-        if ship.halite_amount >= 200:
-            ship_status[ship.id] = "Dropping Halite off"
+            # Ship Organiser #
+            if ship.id not in ship_status:
+                ship_status[ship.id] = "Randomly Moving"
+            elif me.halite_amount >= 4000 and dist > 30:
+                ship_status[ship.id] = "Spawning DropOff"
+            elif ship.halite_amount >= 200:
+                ship_status[ship.id] = "Dropping Halite off"
 
-        logging.info(
-            "Ship '{}' is currently '{}' carrying '{}' halite.".format(
-                ship.id, ship_status[ship.id], ship.halite_amount
+            logging.info(
+                "Ship '{}' is currently '{}' carrying '{}' halite.".format(
+                    ship.id, ship_status[ship.id], ship.halite_amount
+                )
             )
-        )
 
     # End Game #
     if (
